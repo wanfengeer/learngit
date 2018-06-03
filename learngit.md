@@ -12,6 +12,7 @@
 * 把文件添加到版本库
 1.第一步，用命令git add告诉Git，把文件添加到仓库：
 `` $ git add 文件名称``
+使用``git add .``可以将已有文件的所有改动直接添加到仓库。
 2.第二步，用命令git commit告诉Git，把文件提交到仓库：
 ``$ git commit -m "对本次提交的说明" ``
 ps: commit可以一次提交很多文件，所以你可以多次add不同的文件
@@ -54,6 +55,25 @@ Git的版本库里存了很多东西，其中最重要的就是称为stage（或
 ``$ git push -u origin master``
 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令，只用git push就好。
 （嗯，弄了很久发现push不上去，后来发现是没有创建添加密钥2333333，具体操作看文章开头。)
+
+2.只知道远程仓库
+
+* 在GitHub上面找到仓库地址，在本地用``git clone``命令克隆仓库再执行操作。
+一般来说，用ssh支持的原生git协议速度最快。
+###关于分支
+* Git创建一个分支很快，因为它只增加一个指针，改改HEAD的指向，工作区的文件都没有任何变化。
+* Git鼓励大量使用分支：
+ * 查看分支：git branch
+ * 创建分支：git branch <name>
+ * 切换分支：git checkout <name>
+ * 创建+切换分支：git checkout -b <name>
+ * 合并某分支到当前分支：git merge <name>
+ * 删除分支：git branch -d <name>
+* 当不同的分支出现了不同的提交后，直接合并就会出现问题。用git status也可以查看冲突。
+``$ git log --graph --pretty=oneline --abbrev-commit``可查看分支的合并情况
+当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
+解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
+
 
 
   [1]: https://www.cnblogs.com/xixihuang/p/5522424.html
