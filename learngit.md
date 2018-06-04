@@ -24,6 +24,7 @@ ps: commit可以一次提交很多文件，所以你可以多次add不同的文�
 * ``git log``
 命令显示从最近到最远的提交日志
 命令后面可以加--pretty=oneline参数，运行后能看到commit id。
+``$ git log --pretty=oneline --abbrev-commit``
 * ``git reset``
  * 将当前版本回退到之前的版本。
  * 首先，Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，也就是最新的提交，上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
@@ -73,7 +74,31 @@ Git的版本库里存了很多东西，其中最重要的就是称为stage（或
 ``$ git log --graph --pretty=oneline --abbrev-commit``可查看分支的合并情况
 当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
 解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
+* 合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并。
+* ``git stash``可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作。使用后使用``git status``看工作区是干净的
+之后恢复：一是用``git stash apply``恢复，但是恢复后，stash内容并不删除，你需要用``git stash drop``来删除；
+另一种方式是用``git stash pop``，恢复的同时把stash内容也删了：
+``git stash list``查看stash内容
+* 开发一个新feature，最好新建一个分支；
+如果要丢弃一个没有被合并过的分支，可以通过``git branch -D <name>``强行删除。
+* 多人协作的工作模式通常是：
+首先，可以试图用``git push origin <branch-name>``推送自己的修改；
+如果推送失败，则因为远程分支比你的本地更新，需要先用``git pull``试图合并；
+如果合并有冲突，则解决冲突，并在本地提交；
+没有冲突或者解决掉冲突后，再用``git push origin <branch-name>``推送就能成功！
+如果``git pull``提示``no tracking information``，则说明本地分支和远程分支的链接关系没有创建，用命令``git branch --set-upstream-to <branch-name> origin/<branch-name>``。
+###标签管理
+tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。
 
-
+* ``git tag <name>``创建标签（默认打在当前分支最新的commit上）
+``git tag <name> <commit_id>``给版本号为commit_id的提交打上标签
+``git tag``查看所有标签，按字母排序不是时间。
+``git show <tagname>``查看标签信息
+``$ git tag -a <tagname> -m "说明文字" <commit_id>``创建带有说明的标签，用-a指定标签名，-m指定说明文字：
+注：标签总是和某个commit挂钩。如果这个commit既出现在master分支，又出现在dev分支，那么在这两个分支上都可以看到这个标签。
+* 命令``git push origin <tagname>``可以推送一个本地标签；
+命令``git push origin --tags``可以推送全部未推送过的本地标签；
+命令``git tag -d <tagname>``可以删除一个本地标签；
+命令``git push origin :refs/tags/<tagname>``可以删除一个远程标签。
 
   [1]: https://www.cnblogs.com/xixihuang/p/5522424.html
